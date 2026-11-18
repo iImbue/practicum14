@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RecycLoop - Circularity Quiz (Prac 14)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f9f4; color: #1b4332; padding: 40px; }
+        .quiz-card { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 14px; border: 2px solid #40916c; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .option { display: block; margin: 10px 0; padding: 12px; background: #e8f5e9; border-radius: 8px; cursor: pointer; }
+        button { margin-top: 15px; padding: 10px 24px; background: #1b4332; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="quiz-card">
+    <h2>♻ RecycLoop Waste Segregation Quiz</h2>
+    <p id="progress">Question 1 of 3</p>
+    <h3 id="questionText"></h3>
+    <div id="optionsBox"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    <h3 id="scoreDisplay" style="color:#2d6a4f;"></h3>
+</div>
+
+<script>
+    const quizQuestions = [
+        { q: "Which resin code represents clear water bottles (PET)?", options: ["Code #1", "Code #3", "Code #6", "Code #7"], ans: 0 },
+        { q: "How should greasy pizza boxes be handled in a circular system?", options: ["Recycle whole box", "Compost greasy bottom, recycle clean lid", "Put in e-waste", "Wash with soap"], ans: 1 },
+        { q: "How much energy is saved by recycling aluminum vs. virgin ore?", options: ["15%", "40%", "75%", "95%"], ans: 3 }
+    ];
+
+    let current = 0, score = 0;
+
+    function loadQuestion() {
+        const item = quizQuestions[current];
+        document.getElementById("progress").innerText = `Question ${current + 1} of ${quizQuestions.length}`;
+        document.getElementById("questionText").innerText = item.q;
+        const box = document.getElementById("optionsBox");
+        box.innerHTML = "";
+        item.options.forEach((opt, i) => {
+            box.innerHTML += `<label class="option"><input type="radio" name="opt" value="${i}"> ${opt}</label>`;
+        });
+    }
+
+    function nextQuestion() {
+        const selected = document.querySelector('input[name="opt"]:checked');
+        if (!selected) { alert("Please select an answer!"); return; }
+        if (parseInt(selected.value) === quizQuestions[current].ans) score++;
+        current++;
+        if (current < quizQuestions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById("questionText").innerText = "Quiz Completed!";
+            document.getElementById("optionsBox").innerHTML = "";
+            document.getElementById("nextBtn").style.display = "none";
+            document.getElementById("scoreDisplay").innerText = `Your RecycLoop Score: ${score} / ${quizQuestions.length}`;
+        }
+    }
+
+    loadQuestion();
+</script>
+</body>
+</html>
